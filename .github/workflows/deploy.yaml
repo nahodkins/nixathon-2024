@@ -17,7 +17,7 @@ jobs:
         username: ubuntu
         key: ${{ secrets.EC2_KEY }}
         script: |
-          cd ~/your-repo
+          cd ~/${{ github.event.repository.name }}
           git pull origin main
           source venv/bin/activate
           pip install -r requirements.txt
