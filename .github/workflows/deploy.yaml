@@ -32,4 +32,4 @@ jobs:
           git pull origin main
           source venv/bin/activate
           pip install -r requirements.txt
-          nohup python app.py &
+          nohup python app.py > app.log 2>&1 &
