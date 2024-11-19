@@ -15,7 +15,7 @@ jobs:
         mkdir -p ~/.ssh
         echo "${{ secrets.EC2_KEY }}" > ~/.ssh/id_rsa
         chmod 400 ~/.ssh/id_rsa
-        ssh -i ~/.ssh/id_rsa ubuntu@your-ec2-public-ip "echo Connected!"
+        ssh -i ~/.ssh/id_rsa ubuntu@"${{ secrets.EC2_HOST }}" "echo Connected!"
     - name: SSH to EC2 and deploy
       uses: appleboy/ssh-action@v0.1.0
       with:
