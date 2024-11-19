@@ -26,6 +26,7 @@ jobs:
         host: ${{ secrets.EC2_HOST }}
         username: ubuntu
         key: ${{ secrets.EC2_KEY }}
+        port: 22
         script: |
           cd ~/${{ github.event.repository.name }}
           git pull origin main
