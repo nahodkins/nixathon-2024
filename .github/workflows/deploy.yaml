@@ -21,15 +21,9 @@ jobs:
         chmod 400 ~/.ssh/id_rsa
         ssh -v -i ~/.ssh/id_rsa ubuntu@"${{ secrets.EC2_HOST }}" "echo Connected!"
     - name: SSH to EC2 and deploy
-      uses: appleboy/ssh-action@v0.1.0
+      uses: appleboy/ssh-action@v1.2.0
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ubuntu
         key: ${{ secrets.EC2_KEY }}
-        port: 22
-        script: |
-          cd ~/${{ github.event.repository.name }}
-          git pull origin main
-          source venv/bin/activate
-          pip install -r requirements.txt
-          nohup python app.py &
+        script: whoami
