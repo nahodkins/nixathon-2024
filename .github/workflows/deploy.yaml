@@ -26,4 +26,9 @@ jobs:
         host: ${{ secrets.EC2_HOST }}
         username: ubuntu
         key: ${{ secrets.EC2_KEY }}
-        script: whoami
+        script: |
+          cd ~/${{ github.event.repository.name }}
+          git pull origin main
+          source venv/bin/activate
+          pip install -r requirements.txt
+          nohup python app.py &
