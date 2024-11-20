@@ -35,13 +35,13 @@ async def make_move(game_field: GameField) -> MoveResponse:
     print(player)
     if enemies[0][2] == Direction.LEFT:
         print("Turning left")
-        return MoveResponse(moove=MoveCommand.TURN_LEFT)
+        return MoveResponse(move=MoveCommand.TURN_LEFT)
     elif enemies[0][2] == Direction.RIGHT:
         print("Turning right")
-        return MoveResponse(moove=MoveCommand.TURN_RIGHT)
+        return MoveResponse(move=MoveCommand.TURN_RIGHT)
     else:
         print("moving forward")
-        return MoveResponse(moove=MoveCommand.MOVE)
+        return MoveResponse(move=MoveCommand.MOVE)
 
 
 if __name__ == "__main__":
