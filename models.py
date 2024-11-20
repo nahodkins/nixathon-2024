@@ -12,15 +12,15 @@ class CellType(str, Enum):
 
 
 class Direction(str, Enum):
-    NORTH = "N"
-    SOUTH = "S"
-    WEST = "W"
-    EAST = "E"
+    UP = "N"
+    DOWN = "S"
+    LEFT = "W"
+    RIGHT = "E"
 
 
 class MoveCommand(str, Enum):
-    ROTATE_RIGHT = "R"
-    ROTATE_LEFT = "L"
+    TURN_RIGHT = "R"
+    TURN_LEFT = "L"
     MOVE = "M"
     FIRE = "F"
 
