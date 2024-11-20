@@ -152,6 +152,8 @@ def move_to_coin(game_field: GameField, player: Tuple[int, int, Direction], coin
                 return turn_right
     return move
 
+def move_to_center(game_field: GameField, player: Tuple[int, int, Direction]) -> MoveResponse:
+    move_to_coin(game_field, player, (6, 6))
 
 @app.post('/move')
 async def make_move(game_field: GameField) -> MoveResponse:
