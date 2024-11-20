@@ -3,8 +3,7 @@ from models import *
 
 app = FastAPI()
 
-
-@app.get('/health-dict')
+@app.get('/healthz')
 async def status_dict():
     return {"status": "OK"}
 
