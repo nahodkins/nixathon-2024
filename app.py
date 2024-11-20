@@ -136,72 +136,70 @@ def turn_from_asteroids(game_field: GameField, player: Tuple[int, int, Direction
         return turn_right
 
 
-def move_to_coin(game_field: GameField, player: Tuple[int, int, Direction], coin: Tuple[int, int]) -> MoveResponse:
+def move_to_target(game_field: GameField, player: Tuple[int, int, Direction], target: Tuple[int, int]) -> (MoveResponse, bool):
     global next_step
     if has_asteroid_ahead(game_field, player):
         next_step = move
         return turn_from_asteroids(game_field, player)
 
-    if player[0] == coin[0]:
-        if player[1] < coin[1]:
+    if player[0] == target[0]:
+        if player[1] < target[1]:
             if player[2] == Direction.DOWN:
                 print("Moving")
-                return move
+                return move, (player[0] == target[0] and player[1] == target[1])
             elif player[2] == Direction.UP:
-                return turn_from_asteroids(game_field, player)
+                return turn_from_asteroids(game_field, player), (player[0] == target[0] and player[1] == target[1])
             elif player[2] == Direction.LEFT:
                 print("Turning left")
-                return turn_left
+                return turn_left, (player[0] == target[0] and player[1] == target[1])
             else:
                 print("Turning right")
-                return turn_right
+                return turn_right, (player[0] == target[0] and player[1] == target[1])
         else:
             if player[2] == Direction.UP:
                 print("Moving")
-                return move
+                return move, (player[0] == target[0] and player[1] == target[1])
             elif player[2] == Direction.DOWN:
-                return turn_from_asteroids(game_field, player)
+                return turn_from_asteroids(game_field, player), (player[0] == target[0] and player[1] == target[1])
             elif player[2] == Direction.RIGHT:
                 print("Turning left")
-                return turn_left
+                return turn_left, (player[0] == target[0] and player[1] == target[1])
             else:
-                return turn_right
-    elif player[1] == coin[1]:
-        if player[0] < coin[0]:
+                return turn_right, (player[0] == target[0] and player[1] == target[1])
+    elif player[1] == target[1]:
+        if player[0] < target[0]:
             if player[2] == Direction.RIGHT:
-                return move
+                return move, (player[0] == target[0] and player[1] == target[1])
             elif player[2] == Direction.UP:
                 print("Turning right")
-                return turn_right
+                return turn_right, (player[0] == target[0] and player[1] == target[1])
             elif player[2] == Direction.DOWN:
                 print("Turning left")
-                return turn_left
+                return turn_left, (player[0] == target[0] and player[1] == target[1])
             else:
-                return turn_from_asteroids(game_field, player)
+                return turn_from_asteroids(game_field, player), (player[0] == target[0] and player[1] == target[1])
         else:
             if player[2] == Direction.LEFT:
-                return move
+                return move, (player[0] == target[0] and player[1] == target[1])
             elif player[2] == Direction.DOWN:
                 print("Turning right")
-                return turn_right
+                return turn_right, (player[0] == target[0] and player[1] == target[1])
             elif player[2] == Direction.UP:
                 print("Turning left")
-                return turn_left
+                return turn_left, (player[0] == target[0] and player[1] == target[1])
             else:
-                return turn_from_asteroids(game_field, player)
-    return move
+                return turn_from_asteroids(game_field, player), (player[0] == target[0] and player[1] == target[1])
+    return move_to_center(game_field, player)
 
 
 def move_to_center(game_field: GameField, player: Tuple[int, int, Direction]) -> (MoveResponse, bool):
     if not check_asteroid(game_field, (6, 6)):
-        return move_to_coin(game_field, player, (6, 6)), (player[1] == 6 and player[1] == 6)
+        return move_to_target(game_field, player, (6, 6)), (player[0] == 6 and player[1] == 6)
     else:
         for x in (5, 6, 7):
             for y in (5, 6, 7):
                 if not check_asteroid(game_field, (x, y)):
-                    return move_to_coin(game_field, player, (x, y)), (player[1] == x and player[1] == y)
-        else:
-            move
+                    return move_to_target(game_field, player, (x, y)), (player[0] == x and player[1] == y)
 
 
 def check_asteroid(game_field: GameField, point: Tuple[int, int]) -> bool:
@@ -224,8 +222,11 @@ async def make_move(game_field: GameField) -> MoveResponse:
         next_step = None
         print("step=", step, "next_step=", next_step)
         return step
-    # return move_to_center(game_field, player)
-    return move_to_coin(game_field, player, nearest_coin)
+    current_move, in_center = move_to_target(game_field, player, nearest_coin)
+    if in_center:
+        print("Moving to coin")
+        return fire
+    return current_move
     # if enemies[0][2] == Direction.LEFT:
     #     print("Turning left")
     #     return turn_left
