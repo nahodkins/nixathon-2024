@@ -93,6 +93,7 @@ def find_nearest_coin(coins: List[Tuple[int, int]], player: Tuple[int, int, Dire
 
 
 def move_to_coin(game_field: GameField, player: Tuple[int, int, Direction], coin: Tuple[int, int]) -> MoveResponse:
+    global next_step
     if has_asteroid_ahead(game_field, player):
         next_step = move
         return turn_right
@@ -140,6 +141,7 @@ def move_to_coin(game_field: GameField, player: Tuple[int, int, Direction], coin
 
 @app.post('/move')
 async def make_move(game_field: GameField) -> MoveResponse:
+    global next_step, previous_field
     # print(game_field)
     # print(enemies)
     # print(player)
