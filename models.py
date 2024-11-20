@@ -35,7 +35,6 @@ class FieldCell(BaseModel):
 
     @classmethod
     def from_str(cls, cell_str: str):
-        print(cell_str)
         if len(cell_str) == 1:
             return cls(cell_type=CellType(cell_str))
         elif len(cell_str) > 1:
