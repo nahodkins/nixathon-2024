@@ -166,7 +166,7 @@ def move_to_center(game_field: GameField, player: Tuple[int, int, Direction]) ->
 
 
 def check_asteroid(game_field: GameField, point: Tuple[int, int]) -> bool:
-    return game_field[point[1]][point[0]].cell_type == CellType.ASTEROID
+    return game_field.parsed_field[point[1]][point[0]].cell_type == CellType.ASTEROID
 
 @app.post('/move')
 async def make_move(game_field: GameField) -> MoveResponse:
