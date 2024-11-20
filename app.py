@@ -192,15 +192,14 @@ def move_to_coin(game_field: GameField, player: Tuple[int, int, Direction], coin
     return move
 
 
-def move_to_center(game_field: GameField, player: Tuple[int, int, Direction]) -> MoveResponse:
-    #todo if already in center, turn and shoot
+def move_to_center(game_field: GameField, player: Tuple[int, int, Direction]) -> (MoveResponse, bool):
     if not check_asteroid(game_field, (6, 6)):
-        return move_to_coin(game_field, player, (6, 6))
+        return move_to_coin(game_field, player, (6, 6)), (player[1] == 6 and player[1] == 6)
     else:
         for x in (5, 6, 7):
             for y in (5, 6, 7):
                 if not check_asteroid(game_field, (x, y)):
-                    return move_to_coin(game_field, player, (x, y))
+                    return move_to_coin(game_field, player, (x, y)), (player[1] == x and player[1] == y)
         else:
             move
 
@@ -225,9 +224,8 @@ async def make_move(game_field: GameField) -> MoveResponse:
         next_step = None
         print("step=", step, "next_step=", next_step)
         return step
-
-    return move_to_center(game_field, player)
-    # return move_to_coin(game_field, player, nearest_coin)
+    # return move_to_center(game_field, player)
+    return move_to_coin(game_field, player, nearest_coin)
     # if enemies[0][2] == Direction.LEFT:
     #     print("Turning left")
     #     return turn_left
