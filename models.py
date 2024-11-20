@@ -38,7 +38,7 @@ class FieldCell(BaseModel):
         print(cell_str)
         if len(cell_str) == 1:
             return cls(cell_type=CellType(cell_str))
-        elif len(cell_str) == 2:
+        elif len(cell_str) > 1:
             return cls(cell_type=CellType(cell_str[0]), direction=Direction(cell_str[1]))
         else:
             raise ValueError("Invalid cell string")
