@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from models import *
 import heapq
 from typing import List, Tuple
+from copy import deepcopy
 
 app = FastAPI()
 
@@ -101,19 +102,26 @@ def move_to_coin(game_field: GameField, player: Tuple[int, int, Direction], coin
     if player[0] == coin[0]:
         if player[1] < coin[1]:
             if player[2] == Direction.DOWN:
+                print("Moving")
                 return move
             elif player[2] == Direction.UP:
+                print("Turning right")
                 return turn_right
             elif player[2] == Direction.LEFT:
+                print("Turning left")
                 return turn_left
             else:
+                print("Turning right")
                 return turn_right
         else:
             if player[2] == Direction.UP:
+                print("Moving")
                 return move
             elif player[2] == Direction.DOWN:
+                print("Turning right")
                 return turn_right
             elif player[2] == Direction.RIGHT:
+                print("Turning left")
                 return turn_left
             else:
                 return turn_right
@@ -122,19 +130,25 @@ def move_to_coin(game_field: GameField, player: Tuple[int, int, Direction], coin
             if player[2] == Direction.RIGHT:
                 return move
             elif player[2] == Direction.UP:
+                print("Turning right")
                 return turn_right
             elif player[2] == Direction.DOWN:
+                print("Turning left")
                 return turn_left
             else:
+                print("Turning right")
                 return turn_right
         else:
             if player[2] == Direction.LEFT:
                 return move
             elif player[2] == Direction.DOWN:
+                print("Turning right")
                 return turn_right
             elif player[2] == Direction.UP:
+                print("Turning left")
                 return turn_left
             else:
+                print("Turning right")
                 return turn_right
     return move
 
@@ -150,8 +164,9 @@ async def make_move(game_field: GameField) -> MoveResponse:
     coins = get_coins(game_field)
     nearest_coin = find_nearest_coin(coins, player)
     if next_step:
-        step = next_step
+        step = deepcopy(next_step)
         next_step = None
+        print("step=", step, "next_step=", next_step)
         return step
 
     return move_to_coin(game_field, player, nearest_coin)
