@@ -171,6 +171,7 @@ def check_asteroid(game_field: GameField, point: Tuple[int, int]) -> bool:
 @app.post('/move')
 async def make_move(game_field: GameField) -> MoveResponse:
     global next_step, previous_field
+    print("narrowingIn", game_field.narrowingIn)
     # print(game_field)
     # print(enemies)
     # print(player)
