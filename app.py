@@ -222,10 +222,8 @@ async def make_move(game_field: GameField) -> MoveResponse:
         next_step = None
         print("step=", step, "next_step=", next_step)
         return step
-    if len(coins) > 2:
-        current_move, in_center = move_to_target(game_field, player, nearest_coin)
-    else:
-        current_move, in_center = move_to_center(game_field, player)
+
+    current_move, in_center = move_to_center(game_field, player)
 
     if in_center:
         print("Moving to coin")
