@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from models import *
+import random
+
 
 app = FastAPI()
 
@@ -8,16 +10,10 @@ async def status_dict():
     return {"status": "OK"}
 
 
-@app.get('/healthz-model')
-async def status_model():
-    response = HealthCheckResponse(status="OK")
-    return response
-
-
-@app.post('/message')
-async def create_message(message: MessageModel):
-    message.created = True
-    return message
+@app.post('/move')
+async def make_move(game_field: GameField) -> MoveResponse:
+    move = random.choice(list(MoveCommand))
+    return MoveResponse(move=move)
 
 if __name__ == "__main__":
     import uvicorn
