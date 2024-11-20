@@ -3,7 +3,6 @@ from models import *
 import random
 from typing import List, Tuple
 
-
 app = FastAPI()
 
 
@@ -25,7 +24,8 @@ def get_player(game_field: GameField) -> Tuple[int, int, Direction]:
     for y, row in enumerate(game_field.parsed_field):
         for x, cell in enumerate(row):
             if cell.cell_type == CellType.PLAYER and cell.direction:
-                return (x, y, cell.direction)
+                return x, y, cell.direction
+
 
 @app.post('/move')
 async def make_move(game_field: GameField) -> MoveResponse:
@@ -34,11 +34,14 @@ async def make_move(game_field: GameField) -> MoveResponse:
     print(enemies)
     print(player)
     if enemies[0][2] == Direction.LEFT:
-        return MoveResponse(moove = MoveCommand.TURN_LEFT)
+        print("Turning left")
+        return MoveResponse(moove=MoveCommand.TURN_LEFT)
     elif enemies[0][2] == Direction.RIGHT:
-        return MoveResponse(moove = MoveCommand.TURN_RIGHT)
+        print("Turning right")
+        return MoveResponse(moove=MoveCommand.TURN_RIGHT)
     else:
-        return MoveResponse(moove = MoveCommand.MOVE)
+        print("moving forward")
+        return MoveResponse(moove=MoveCommand.MOVE)
 
 
 if __name__ == "__main__":
