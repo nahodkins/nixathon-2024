@@ -57,12 +57,17 @@ def find_nearest_enemy(enemies: List[Tuple[int, int, Direction]], player: Tuple[
     return nearest_enemy
 
 def find_nearest_coin(coins: List[Tuple[int, int]], player: Tuple[int, int, Direction]) -> Tuple[int, int]:
-    shortest_distance = float('inf')
+    min_moves = float('inf')
     nearest_coin = None
     for coin in coins:
-        distance = abs(coin[0] - player[0]) + abs(coin[1] - player[1])
-        if distance < shortest_distance:
-            shortest_distance = distance
+        dx = abs(coin[0] - player[0])
+        dy = abs(coin[1] - player[1])
+        turns = 0
+        if (dx > 0 and dy > 0) or (player[2] in [Direction.UP, Direction.DOWN] and dx > 0) or (player[2] in [Direction.LEFT, Direction.RIGHT] and dy > 0):
+            turns = 1
+        moves = dx + dy + turns
+        if moves < min_moves:
+            min_moves = moves
             nearest_coin = coin
     return nearest_coin
 
