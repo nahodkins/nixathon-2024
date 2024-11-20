@@ -189,7 +189,7 @@ def move_to_target(game_field: GameField, player: Tuple[int, int, Direction], ta
                 return turn_left, (player[0] == target[0] and player[1] == target[1])
             else:
                 return turn_from_asteroids(game_field, player), (player[0] == target[0] and player[1] == target[1])
-    return move_to_center(game_field, player)
+    return move, (player[0] == target[0] and player[1] == target[1])
 
 
 def move_to_center(game_field: GameField, player: Tuple[int, int, Direction]) -> (MoveResponse, bool):
