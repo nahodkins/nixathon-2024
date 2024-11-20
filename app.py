@@ -152,8 +152,19 @@ def move_to_coin(game_field: GameField, player: Tuple[int, int, Direction], coin
                 return turn_right
     return move
 
+
 def move_to_center(game_field: GameField, player: Tuple[int, int, Direction]) -> MoveResponse:
-    return move_to_coin(game_field, player, (6, 6))
+    if not check_asteroid(game_field, (6, 6)):
+        return move_to_coin(game_field, player, (6, 6))
+    else:
+        for x in (5, 6, 7):
+            for y in (5, 6, 7):
+                if not check_asteroid(game_field, (x, y)):
+                    return move_to_coin(game_field, player, (x, y))
+
+
+def check_asteroid(game_field: GameField, point: Tuple[int, int]) -> bool:
+    return game_field[point[1]][point[0]].cell_type == CellType.ASTEROID
 
 @app.post('/move')
 async def make_move(game_field: GameField) -> MoveResponse:
