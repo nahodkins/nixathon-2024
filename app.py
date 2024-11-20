@@ -16,6 +16,7 @@ move = MoveResponse(move=MoveCommand.MOVE)
 fire = MoveResponse(move=MoveCommand.FIRE)
 
 previous_field = None
+next_step = None
 
 def get_enemies(game_field: GameField) -> List[Tuple[int, int, Direction]]:
     enemies = []
@@ -56,6 +57,25 @@ def find_nearest_enemy(enemies: List[Tuple[int, int, Direction]], player: Tuple[
             nearest_enemy = enemy
     return nearest_enemy
 
+def find_nearest_asteroid(game_field: GameField, player: Tuple[int, int, Direction]) -> Tuple[int, int, Direction]:
+    shortest_distance = float('inf')
+    nearest_asteroid = None
+    for y, row in enumerate(game_field.parsed_field):
+        for x, cell in enumerate(row):
+            if cell.cell_type == CellType.ASTEROID:
+                distance = abs(x - player[0]) + abs(y - player[1])
+                if distance < shortest_distance:
+                    shortest_distance = distance
+                    nearest_asteroid = (x, y, player[2])
+    return nearest_asteroid
+
+def has_asteroid_ahead(game_field: GameField, player: Tuple[int, int, Direction]) -> bool:
+    for y, row in enumerate(game_field.parsed_field):
+        for x, cell in enumerate(row):
+            if cell.cell_type == CellType.ASTEROID and (abs(x - player[0]) + abs(y - player[1]) == 1):
+                return True
+    return False
+
 def find_nearest_coin(coins: List[Tuple[int, int]], player: Tuple[int, int, Direction]) -> Tuple[int, int]:
     min_moves = float('inf')
     nearest_coin = None
@@ -73,6 +93,10 @@ def find_nearest_coin(coins: List[Tuple[int, int]], player: Tuple[int, int, Dire
 
 
 def move_to_coin(game_field: GameField, player: Tuple[int, int, Direction], coin: Tuple[int, int]) -> MoveResponse:
+    if has_asteroid_ahead(game_field, player):
+        next_step = move
+        return turn_right
+
     if player[0] == coin[0]:
         if player[1] < coin[1]:
             if player[2] == Direction.DOWN:
@@ -123,6 +147,10 @@ async def make_move(game_field: GameField) -> MoveResponse:
     player = get_player(game_field)
     coins = get_coins(game_field)
     nearest_coin = find_nearest_coin(coins, player)
+    if next_step:
+        step = next_step
+        next_step = None
+        return step
 
     return move_to_coin(game_field, player, nearest_coin)
     # if enemies[0][2] == Direction.LEFT:
