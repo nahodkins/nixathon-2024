@@ -71,11 +71,21 @@ def find_nearest_asteroid(game_field: GameField, player: Tuple[int, int, Directi
     return nearest_asteroid
 
 def has_asteroid_ahead(game_field: GameField, player: Tuple[int, int, Direction]) -> bool:
-    for y, row in enumerate(game_field.parsed_field):
-        for x, cell in enumerate(row):
-            if cell.cell_type == CellType.ASTEROID and (abs(x - player[0]) + abs(y - player[1]) == 1):
-                return True
-    return False
+    if player[2] == Direction.UP:
+        print(player, check_asteroid(game_field, (player[0], player[1] - 1)))
+        return check_asteroid(game_field, (player[0], player[1] - 1))
+    elif player[2] == Direction.RIGHT:
+        print(player, check_asteroid(game_field, (player[0] + 1, player[1])))
+        return check_asteroid(game_field, (player[0] + 1, player[1]))
+    elif player[2] == Direction.LEFT:
+        print(player, check_asteroid(game_field, (player[0] - 1, player[1])))
+        return check_asteroid(game_field, (player[0] - 1, player[1]))
+    else:
+        print(player, check_asteroid(game_field, (player[0], player[1] + 1)))
+        return check_asteroid(game_field, (player[0], player[1] + 1))
+
+# def has_asteroid_to_left(game_field: GameField, player: Tuple[int, int, Direction]) -> bool:
+
 
 def find_nearest_coin(coins: List[Tuple[int, int]], player: Tuple[int, int, Direction]) -> Tuple[int, int]:
     min_moves = float('inf')
@@ -172,6 +182,7 @@ def check_asteroid(game_field: GameField, point: Tuple[int, int]) -> bool:
 async def make_move(game_field: GameField) -> MoveResponse:
     global next_step, previous_field
     print("narrowingIn", game_field.narrowingIn)
+
     # print(game_field)
     # print(enemies)
     # print(player)
