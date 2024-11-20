@@ -58,6 +58,7 @@ def find_nearest_enemy(enemies: List[Tuple[int, int, Direction]], player: Tuple[
             nearest_enemy = enemy
     return nearest_enemy
 
+
 def find_nearest_asteroid(game_field: GameField, player: Tuple[int, int, Direction]) -> Tuple[int, int, Direction]:
     shortest_distance = float('inf')
     nearest_asteroid = None
@@ -69,6 +70,7 @@ def find_nearest_asteroid(game_field: GameField, player: Tuple[int, int, Directi
                     shortest_distance = distance
                     nearest_asteroid = (x, y, player[2])
     return nearest_asteroid
+
 
 def has_asteroid_ahead(game_field: GameField, player: Tuple[int, int, Direction]) -> bool:
     if player[2] == Direction.UP:
@@ -84,8 +86,27 @@ def has_asteroid_ahead(game_field: GameField, player: Tuple[int, int, Direction]
         print(player, check_asteroid(game_field, (player[0], player[1] + 1)))
         return check_asteroid(game_field, (player[0], player[1] + 1))
 
-# def has_asteroid_to_left(game_field: GameField, player: Tuple[int, int, Direction]) -> bool:
 
+def has_asteroid_to_left(game_field: GameField, player: Tuple[int, int, Direction]) -> bool:
+    if player[2] == Direction.UP:
+        return check_asteroid(game_field, (player[0] - 1, player[1]))
+    elif player[2] == Direction.RIGHT:
+        return check_asteroid(game_field, (player[0], player[1] - 1))
+    elif player[2] == Direction.LEFT:
+        return check_asteroid(game_field, (player[0], player[1] + 1))
+    else:
+        return check_asteroid(game_field, (player[0] + 1, player[1]))
+
+
+def has_asteroid_to_right(game_field: GameField, player: Tuple[int, int, Direction]) -> bool:
+    if player[2] == Direction.UP:
+        return check_asteroid(game_field, (player[0] + 1, player[1]))
+    elif player[2] == Direction.RIGHT:
+        return check_asteroid(game_field, (player[0], player[1] + 1))
+    elif player[2] == Direction.LEFT:
+        return check_asteroid(game_field, (player[0], player[1] - 1))
+    else:
+        return check_asteroid(game_field, (player[0] - 1, player[1]))
 
 def find_nearest_coin(coins: List[Tuple[int, int]], player: Tuple[int, int, Direction]) -> Tuple[int, int]:
     min_moves = float('inf')
@@ -103,11 +124,23 @@ def find_nearest_coin(coins: List[Tuple[int, int]], player: Tuple[int, int, Dire
     return nearest_coin
 
 
+def turn_from_asteroids(game_field: GameField, player: Tuple[int, int, Direction]) -> MoveResponse:
+    if has_asteroid_to_right(game_field, player):
+        print("Turning left")
+        return turn_left
+    elif has_asteroid_to_left(game_field, player):
+        print("Turning right")
+        return turn_right
+    else:
+        print("Turning right")
+        return turn_right
+
+
 def move_to_coin(game_field: GameField, player: Tuple[int, int, Direction], coin: Tuple[int, int]) -> MoveResponse:
     global next_step
     if has_asteroid_ahead(game_field, player):
         next_step = move
-        return turn_right
+        return turn_from_asteroids(game_field, player)
 
     if player[0] == coin[0]:
         if player[1] < coin[1]:
@@ -115,8 +148,7 @@ def move_to_coin(game_field: GameField, player: Tuple[int, int, Direction], coin
                 print("Moving")
                 return move
             elif player[2] == Direction.UP:
-                print("Turning right")
-                return turn_right
+                return turn_from_asteroids(game_field, player)
             elif player[2] == Direction.LEFT:
                 print("Turning left")
                 return turn_left
@@ -128,8 +160,7 @@ def move_to_coin(game_field: GameField, player: Tuple[int, int, Direction], coin
                 print("Moving")
                 return move
             elif player[2] == Direction.DOWN:
-                print("Turning right")
-                return turn_right
+                return turn_from_asteroids(game_field, player)
             elif player[2] == Direction.RIGHT:
                 print("Turning left")
                 return turn_left
@@ -146,8 +177,7 @@ def move_to_coin(game_field: GameField, player: Tuple[int, int, Direction], coin
                 print("Turning left")
                 return turn_left
             else:
-                print("Turning right")
-                return turn_right
+                return turn_from_asteroids(game_field, player)
         else:
             if player[2] == Direction.LEFT:
                 return move
@@ -158,12 +188,12 @@ def move_to_coin(game_field: GameField, player: Tuple[int, int, Direction], coin
                 print("Turning left")
                 return turn_left
             else:
-                print("Turning right")
-                return turn_right
+                return turn_from_asteroids(game_field, player)
     return move
 
 
 def move_to_center(game_field: GameField, player: Tuple[int, int, Direction]) -> MoveResponse:
+    #todo if already in center, turn and shoot
     if not check_asteroid(game_field, (6, 6)):
         return move_to_coin(game_field, player, (6, 6))
     else:
