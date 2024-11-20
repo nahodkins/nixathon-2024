@@ -194,12 +194,12 @@ def move_to_target(game_field: GameField, player: Tuple[int, int, Direction], ta
 
 def move_to_center(game_field: GameField, player: Tuple[int, int, Direction]) -> (MoveResponse, bool):
     if not check_asteroid(game_field, (6, 6)):
-        return move_to_target(game_field, player, (6, 6)), (player[0] == 6 and player[1] == 6)
+        return move_to_target(game_field, player, (6, 6))
     else:
         for x in (5, 6, 7):
             for y in (5, 6, 7):
                 if not check_asteroid(game_field, (x, y)):
-                    return move_to_target(game_field, player, (x, y)), (player[0] == x and player[1] == y)
+                    return move_to_target(game_field, player, (x, y))
 
 
 def check_asteroid(game_field: GameField, point: Tuple[int, int]) -> bool:
