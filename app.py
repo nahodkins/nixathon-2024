@@ -161,6 +161,8 @@ def move_to_center(game_field: GameField, player: Tuple[int, int, Direction]) ->
             for y in (5, 6, 7):
                 if not check_asteroid(game_field, (x, y)):
                     return move_to_coin(game_field, player, (x, y))
+        else:
+            move
 
 
 def check_asteroid(game_field: GameField, point: Tuple[int, int]) -> bool:
