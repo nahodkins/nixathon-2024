@@ -171,7 +171,8 @@ async def make_move(game_field: GameField) -> MoveResponse:
         print("step=", step, "next_step=", next_step)
         return step
 
-    return move_to_coin(game_field, player, nearest_coin)
+    return move_to_center(game_field, player)
+    # return move_to_coin(game_field, player, nearest_coin)
     # if enemies[0][2] == Direction.LEFT:
     #     print("Turning left")
     #     return turn_left
