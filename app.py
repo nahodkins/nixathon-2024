@@ -140,7 +140,7 @@ def move_to_target(game_field: GameField, player: Tuple[int, int, Direction], ta
     global next_step
     if has_asteroid_ahead(game_field, player):
         next_step = move
-        return turn_from_asteroids(game_field, player)
+        return turn_from_asteroids(game_field, player), (player[0] == target[0] and player[1] == target[1])
 
     if player[0] == target[0]:
         if player[1] < target[1]:
@@ -222,9 +222,14 @@ async def make_move(game_field: GameField) -> MoveResponse:
         next_step = None
         print("step=", step, "next_step=", next_step)
         return step
-    current_move, in_center = move_to_target(game_field, player, nearest_coin)
+    if len(coins) > 2:
+        current_move, in_center = move_to_target(game_field, player, nearest_coin)
+    else:
+        current_move, in_center = move_to_center(game_field, player)
+
     if in_center:
         print("Moving to coin")
+        next_step = turn_right
         return fire
     return current_move
     # if enemies[0][2] == Direction.LEFT:
